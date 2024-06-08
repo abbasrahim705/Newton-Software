@@ -14,21 +14,22 @@ class Installmentduedate_model extends MY_Model
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function add($id,$data)
+    public function add($id, $data, $installment_ids = [])
     {
+        if (count($data) > 0) {
+            foreach ($data as $key => $value) {
+                // print_r($key);
+                // print_r($value);
 
-            foreach ($data as $due_date) {
-                // Convert date to MySQL date format (Y-m-d) if not already in this format
-                $formatted_due_date = date('Y-m-d', strtotime($due_date));
-    
-                // Prepare data array for insertion
-                $data = array(
+                $formatted_due_date = date('Y-m-d', strtotime($value));
+                $insert_data = array(
                     'student_fees_master_id' => $id,
-                    'due_date' => $formatted_due_date
+                    'due_date' => $formatted_due_date,
+                    'feetype_installment_id' => $installment_ids[$key]
                 );
-    
-                // Insert data into the database
-                $this->db->insert('installment_due_date', $data);
+                // print_r($insert_data);
+                $this->db->insert('installment_due_date', $insert_data);
             }
         }
+    }
 }

@@ -1386,8 +1386,10 @@ class Student extends Admin_Controller
 
                 if ($fee_session_group_id) {
                     $assign_bulk_fees = $this->studentfeemaster_model->assign_bulk_fees($fee_session_group_id, $student_session_id, array());
+                    // $installments_due_date = $this->input->post('due_date');
                     $installments_due_date = $this->input->post('due_date');
-                    $this->installmentduedate_model->add($assign_bulk_fees,$installments_due_date);
+                    $installment_id = $this->input->post('installment_id');
+                    $this->installmentduedate_model->add($assign_bulk_fees,$installments_due_date,$installment_id);
                  }
 
 

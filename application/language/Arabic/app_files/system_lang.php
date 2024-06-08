@@ -2364,3 +2364,7 @@ $lang['manual']="يدوي";
 $lang['staff_day_wise_attendance_report']="تقرير الحضور الحكيم ليوم الموظفين";
 $lang['student_day_wise_attendance_report']="تقرير الحضور الحكيم ليوم الطالب";
 $lang['scan_location']= "موقع المسح";
+$lang['installment_due_date'] = "تاريخ استحقاق القسط";
+$lang['tabby'] = "العتابي";
+$lang['tamara'] = "تمارا";
+$lang['bank_transfer'] = "التحويل المصرفي";

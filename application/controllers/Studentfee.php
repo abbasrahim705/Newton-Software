@@ -67,7 +67,7 @@ class Studentfee extends Admin_Controller
         $class               = $this->class_model->get();
 
         $data['classlist']   = $class;
-
+        
         $this->load->view('layout/header', $data);
 
         $this->load->view('studentfee/studentfeeSearch', $data);
@@ -203,6 +203,8 @@ class Studentfee extends Admin_Controller
                 $row[] = $this->customlib->dateformat($student->dob);
 
                 $row[] = $student->mobileno;
+
+                $row[] = $this->customlib->dateformat($student->installment_due_date);
 
                 $row[] = "<a href=" . site_url('studentfee/addfee/' . $student->student_session_id) . "  class='btn btn-info btn-xs'>" . $this->lang->line('collect_fees') . "</a>";
 
@@ -687,7 +689,6 @@ class Studentfee extends Admin_Controller
         $data['settinglist'] = $setting_result;
 
         $record              = $this->input->post('data');
-
         $record_array        = json_decode($record);
 
 
@@ -722,14 +723,14 @@ class Studentfee extends Admin_Controller
 
             }
 
-
+            
 
             $fees_array[] = $feeList;
 
         }
 
-
-
+        $data['payment_methods'] = $this->studentfeemaster_model->getPaymentMethods();
+        
         $data['feearray'] = $fees_array;
 
         $result           = array(
@@ -775,7 +776,6 @@ class Studentfee extends Admin_Controller
 
 
         $module = $this->module_model->getPermissionByModulename('transport');
-
         if ($module['is_active']) {
 
 
@@ -789,7 +789,7 @@ class Studentfee extends Admin_Controller
         $data['student']       = $student;
 
         $student_due_fee       = $this->studentfeemaster_model->getStudentFees($id);
-
+        
         $student_discount_fee  = $this->feediscount_model->getStudentFeesDiscount($id);
 
 
@@ -830,7 +830,7 @@ class Studentfee extends Admin_Controller
 
         }
 
-
+        
 
         $this->load->view('layout/header', $data);
 

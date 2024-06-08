@@ -442,11 +442,13 @@ class Studentfeemaster_model extends MY_Model
     public function getDueFeeByFeeSessionGroup($fee_session_groups_id, $student_fees_master_id)
     {
 
-        $sql = "SELECT student_fees_master.*,fee_groups_feetype.id as `fee_groups_feetype_id`,fee_groups_feetype.amount,fee_groups_feetype.due_date,fee_groups_feetype.fine_amount,fee_groups_feetype.fee_groups_id,fee_groups.name,fee_groups_feetype.feetype_id,feetype.code,feetype.type, IFNULL(student_fees_deposite.id,0) as `student_fees_deposite_id`, IFNULL(student_fees_deposite.amount_detail,0) as `amount_detail` FROM `student_fees_master` INNER JOIN fee_session_groups on fee_session_groups.id = student_fees_master.fee_session_group_id INNER JOIN fee_groups_feetype on  fee_groups_feetype.fee_session_group_id = fee_session_groups.id  INNER JOIN fee_groups on fee_groups.id=fee_groups_feetype.fee_groups_id INNER JOIN feetype on feetype.id=fee_groups_feetype.feetype_id LEFT JOIN student_fees_deposite on student_fees_deposite.student_fees_master_id=student_fees_master.id and student_fees_deposite.fee_groups_feetype_id=fee_groups_feetype.id WHERE student_fees_master.fee_session_group_id =" . $fee_session_groups_id . " and student_fees_master.id=" . $student_fees_master_id . " order by fee_groups_feetype.due_date ASC";
-
+        $sql = "SELECT student_fees_master.*,fee_groups_feetype.id as `fee_groups_feetype_id`,fee_groups_feetype.amount,fee_groups_feetype.due_date,fee_groups_feetype.fine_amount,fee_groups_feetype.fee_groups_id,fee_groups.name,fee_groups_feetype.feetype_id,feetype.code,feetype.type, IFNULL(student_fees_deposite.id,0) as `student_fees_deposite_id`, IFNULL(student_fees_deposite.amount_detail,0) as `amount_detail`,installment_due_date.due_date as installment_due_date FROM `student_fees_master` INNER JOIN fee_session_groups on fee_session_groups.id = student_fees_master.fee_session_group_id INNER JOIN fee_groups_feetype on  fee_groups_feetype.fee_session_group_id = fee_session_groups.id  INNER JOIN fee_groups on fee_groups.id=fee_groups_feetype.fee_groups_id INNER JOIN feetype on feetype.id=fee_groups_feetype.feetype_id INNER JOIN installment_due_date ON  installment_due_date.feetype_installment_id= feetype.id AND installment_due_date.student_fees_master_id = " . $student_fees_master_id . " LEFT JOIN student_fees_deposite on student_fees_deposite.student_fees_master_id=student_fees_master.id and student_fees_deposite.fee_groups_feetype_id=fee_groups_feetype.id WHERE student_fees_master.fee_session_group_id =" . $fee_session_groups_id . " and student_fees_master.id=" . $student_fees_master_id . " order by fee_groups_feetype.due_date ASC , installment_due_date.due_date ASC";
+        // print_r($sql);exit;
         $query = $this->db->query($sql);
 
         $result_value = $query->result();
+        // echo("<pre>");
+        // print_r($result_value);exit;
         return $result_value;
     }
 
@@ -1386,5 +1388,22 @@ class Studentfeemaster_model extends MY_Model
 
         $query  = $this->db->query($sql);
         return $query->result();
+    }
+    public function getPaymentMethods()
+    {
+        $this->db->select('field_values');
+        $this->db->from('custom_fields');
+        $this->db->where('id', '1');
+        $query = $this->db->get();
+        $field_values = $query->row_array();
+        $array = [];
+        if (isset($field_values['field_values']) && !empty($field_values['field_values'])) {
+            $trimmedString = trim($field_values['field_values']);
+            // Step 2: Explode the string into an array using comma as the delimiter
+            $array = explode(",", $trimmedString);
+            // Step 3: Trim each element in the array to remove leading and trailing whitespace
+            $array = array_map('trim', $array);
+        }
+        return $array;
     }
 }

@@ -2364,3 +2364,7 @@ $lang['manual']= "Manual";
 $lang['staff_day_wise_attendance_report']= "Staff Day Wise Attendance Report";
 $lang['student_day_wise_attendance_report']= "Student Day Wise Attendance Report";
 $lang['scan_location']= "Scan Location";
+$lang['installment_due_date'] = "Installment Due Date";
+$lang['tabby'] = "Tabby";
+$lang['tamara'] = "Tamara";
+$lang['bank_transfer'] = "Bank Transfer";
