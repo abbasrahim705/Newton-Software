@@ -2368,3 +2368,5 @@ $lang['installment_due_date'] = "تاريخ استحقاق القسط";
 $lang['tabby'] = "العتابي";
 $lang['tamara'] = "تمارا";
 $lang['bank_transfer'] = "التحويل المصرفي";
+$lang['location'] = "موقع";
+$lang['payment_mode'] = "طريقة الدفع";
