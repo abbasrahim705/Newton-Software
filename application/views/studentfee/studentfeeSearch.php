@@ -130,6 +130,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <th><?php echo $this->lang->line('date_of_birth'); ?></th>
                                             <th><?php echo $this->lang->line('mobile_no'); ?></th>
                                             <th><?php echo ($this->lang->line('installment_due_date') ? $this->lang->line('installment_due_date') : 'Installment Due Date')?></th>
+                                            <th><?php echo ($this->lang->line('payment_mode') ? $this->lang->line('payment_mode') : 'Mode of Payment')?></th>
+                                            <th><?php echo ($this->lang->line('location') ? $this->lang->line('location') : 'Location')?></th>
                                             <th class="text-right noExport"><?php echo $this->lang->line('action'); ?></th>
 
                                         </tr>

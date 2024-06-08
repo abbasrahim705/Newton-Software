@@ -150,6 +150,14 @@ $language_name   = $language["short_code"];
                                                             <td><b class="text-danger"> <?php echo $student['rte']; ?> </b>
                                                             </td>
                                                         <?php } ?>
+                                                        <th><?php echo $this->lang->line('payment_mode'); ?></th>
+                                                        <td> <?php echo $student['payment_mode']; ?>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><?php echo $this->lang->line('location'); ?></th>
+                                                        <td> <?php echo $student['location']; ?>
+                                                        </td>
                                                     </tr>
 
                                                 </tbody>
@@ -204,7 +212,7 @@ $language_name   = $language["short_code"];
                                         <th class="text text-right"><?php echo $this->lang->line('fine'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
                                         <th class="text text-right"><?php echo $this->lang->line('paid'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
                                         <th class="text text-right"><?php echo $this->lang->line('balance'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                        <th class="text text-right"><?php echo ($this->lang->line('installment_due_date') ? $this->lang->line('installment_due_date') : 'Installment Due Date')?></th>
+                                        <th class="text text-right"><?php echo ($this->lang->line('installment_due_date') ? $this->lang->line('installment_due_date') : 'Installment Due Date') ?></th>
                                         <th class="text text-right noExport"><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
                                 </thead>
@@ -296,12 +304,12 @@ $language_name   = $language["short_code"];
                                                     <?php
                                                     if ($feetype_balance == 0) {
                                                     ?><span class="label label-success"><?php echo $this->lang->line('paid'); ?></span><?php
-                                                                                            } else if (!empty($fee_value->amount_detail)) {
-                                                                                                ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
-                                                                                                } else {
-                                                                                                    ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
-                                                                                                }
-                                                                                                ?>
+                                                                                                                                    } else if (!empty($fee_value->amount_detail)) {
+                                                                                                                                        ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
+                                                                                                                                                                                    } else {
+                                                                                                                                                                                        ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
+                                                                                                                                                                                    }
+                                                                                                                                                                                        ?>
                                                 </td>
                                                 <td class="text text-right">
                                                     <?php echo amountFormat($fee_value->amount);
@@ -482,12 +490,12 @@ $language_name   = $language["short_code"];
                                                         <?php
                                                         if ($feetype_balance == 0) {
                                                         ?><span class="label label-success"><?php echo $this->lang->line('paid'); ?></span><?php
-                                                                                            } else if (!empty($transport_fee_value->amount_detail)) {
-                                                                                                ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
-                                                                                                } else {
-                                                                                                    ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
-                                                                                                }
-                                                                                                ?>
+                                                                                                                                        } else if (!empty($transport_fee_value->amount_detail)) {
+                                                                                                                                            ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
+                                                                                                                                                                                    } else {
+                                                                                                                                                                                        ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
+                                                                                                                                                                                    }
+                                                                                                                                                                                        ?>
                                                     </td>
                                                     <td class="text text-right">
                                                         <?php

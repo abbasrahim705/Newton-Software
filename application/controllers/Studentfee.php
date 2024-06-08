@@ -5,7 +5,6 @@
 if (!defined('BASEPATH')) {
 
     exit('No direct script access allowed');
-
 }
 
 
@@ -39,7 +38,6 @@ class Studentfee extends Admin_Controller
         $this->sch_setting_detail = $this->setting_model->getSetting();
 
         $this->current_session = $this->setting_model->getCurrentSession();
-
     }
 
 
@@ -51,7 +49,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_view')) {
 
             access_denied();
-
         }
 
 
@@ -67,13 +64,12 @@ class Studentfee extends Admin_Controller
         $class               = $this->class_model->get();
 
         $data['classlist']   = $class;
-        
+
         $this->load->view('layout/header', $data);
 
         $this->load->view('studentfee/studentfeeSearch', $data);
 
         $this->load->view('layout/footer', $data);
-
     }
 
 
@@ -83,7 +79,6 @@ class Studentfee extends Admin_Controller
     {
 
         $this->load->helper('pdf_helper');
-
     }
 
 
@@ -97,7 +92,6 @@ class Studentfee extends Admin_Controller
         if ($search_type == "class_search") {
 
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'required|trim|xss_clean');
-
         } elseif ($search_type == "keyword_search") {
 
             $this->form_validation->set_rules('search_text', $this->lang->line('keyword'), 'required|trim|xss_clean');
@@ -105,7 +99,6 @@ class Studentfee extends Admin_Controller
             $data = array('search_text' => 'dummy');
 
             $this->form_validation->set_data($data);
-
         }
 
         if ($this->form_validation->run() == false) {
@@ -115,11 +108,9 @@ class Studentfee extends Admin_Controller
             if ($search_type == "class_search") {
 
                 $error['class_id'] = form_error('class_id');
-
             } elseif ($search_type == "keyword_search") {
 
                 $error['search_text'] = form_error('search_text');
-
             }
 
 
@@ -127,7 +118,6 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 0, 'error' => $error);
 
             echo json_encode($array);
-
         } else {
 
             $search_type = $this->input->post('search_type');
@@ -139,12 +129,10 @@ class Studentfee extends Admin_Controller
             $to_date    = $this->input->post('to_date');
             $section_id  = $this->input->post('section_id');
 
-            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'search_type' => $search_type, 'search_text' => $search_text,'from_date' => $from_date, 'to_date' => $to_date);
+            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'search_type' => $search_type, 'search_text' => $search_text, 'from_date' => $from_date, 'to_date' => $to_date);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
-
         }
-
     }
 
 
@@ -165,11 +153,9 @@ class Studentfee extends Admin_Controller
         if ($search_type == "class_search") {
 
             $students = $this->student_model->getDatatableByClassSection($class, $section, $from_date, $to_date);
-
         } elseif ($search_type == "keyword_search") {
 
             $students = $this->student_model->getDatatableByFullTextSearch($search_text);
-
         }
 
         $sch_setting = $this->sch_setting_detail;
@@ -197,7 +183,6 @@ class Studentfee extends Admin_Controller
                 if ($sch_setting->father_name) {
 
                     $row[] = $student->father_name;
-
                 }
 
                 $row[] = $this->customlib->dateformat($student->dob);
@@ -205,15 +190,16 @@ class Studentfee extends Admin_Controller
                 $row[] = $student->mobileno;
 
                 $row[] = $this->customlib->dateformat($student->installment_due_date);
+                $row[] = $student->payment_mode;
+                $row[] = $student->location;
+
 
                 $row[] = "<a href=" . site_url('studentfee/addfee/' . $student->student_session_id) . "  class='btn btn-info btn-xs'>" . $this->lang->line('collect_fees') . "</a>";
 
 
 
                 $dt_data[] = $row;
-
             }
-
         }
 
         $json_data = array(
@@ -229,7 +215,6 @@ class Studentfee extends Admin_Controller
         );
 
         echo json_encode($json_data);
-
     }
 
 
@@ -241,7 +226,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('search_due_fees', 'can_view')) {
 
             access_denied();
-
         }
 
 
@@ -279,7 +263,6 @@ class Studentfee extends Admin_Controller
 
 
                     $transportfesstype[] = $this->transportfee_model->transportfesstype($this->current_session, $key);
-
                 }
 
 
@@ -293,17 +276,13 @@ class Studentfee extends Admin_Controller
                         $transportfesstype[$trs_key]->type = $this->lang->line(strtolower($trs_value->type));
 
                         $transportfesstype[$trs_key]->code = $this->lang->line(strtolower($trs_value->code));
-
                     }
-
                 }
 
 
 
                 $feesessiongroup[count($feesessiongroup)] = (object)array('id' => 'Transport', 'group_name' => 'Transport Fees', 'is_system' => 0, 'feetypes' => $transportfesstype);
-
             }
-
         }
 
 
@@ -317,7 +296,6 @@ class Studentfee extends Admin_Controller
         if (isset($_POST['feegroup_id']) && $_POST['feegroup_id'] != '') {
 
             $data['fees_group'] = $_POST['feegroup_id'];
-
         }
 
 
@@ -325,7 +303,6 @@ class Studentfee extends Admin_Controller
         if (isset($_POST['select_all']) && $_POST['select_all'] != '') {
 
             $data['select_all'] = $_POST['select_all'];
-
         }
 
 
@@ -341,7 +318,6 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/studentSearchFee', $data);
 
             $this->load->view('layout/footer', $data);
-
         } else {
 
             $feegroups = $this->input->post('feegroup');
@@ -363,15 +339,12 @@ class Studentfee extends Admin_Controller
                 if ($feegroup[0] == "Transport") {
 
                     $transport_groups_feetype_array[] = $feegroup[1];
-
                 } else {
 
                     $fee_group_array[]          = $feegroup[0];
 
                     $fee_groups_feetype_array[] = $feegroup[1];
-
                 }
-
             }
 
 
@@ -379,13 +352,11 @@ class Studentfee extends Admin_Controller
             $fee_group_comma = implode(', ', array_map(function ($val) {
 
                 return sprintf("'%s'", $val);
-
             }, array_unique($fee_group_array)));
 
             $fee_groups_feetype_comma = implode(', ', array_map(function ($val) {
 
                 return sprintf("'%s'", $val);
-
             }, array_unique($fee_groups_feetype_array)));
 
 
@@ -435,13 +406,11 @@ class Studentfee extends Admin_Controller
                             $amount_discount = $amount_discount + $a_value->amount_discount;
 
                             $amount_fine     = $amount_fine + $a_value->amount_fine;
-
                         }
 
                         if ($amt_due <= ($amount + $amount_discount)) {
 
                             unset($student_due_fee[$student_due_fee_key]);
-
                         } else {
 
 
@@ -451,7 +420,6 @@ class Studentfee extends Admin_Controller
 
 
                                 $students[$student_due_fee_value['student_session_id']] = $this->add_new_student($student_due_fee_value);
-
                             }
 
 
@@ -475,9 +443,7 @@ class Studentfee extends Admin_Controller
                                 'fee_code'        => $student_due_fee_value['fee_code'],
 
                             );
-
                         }
-
                     } else {
 
 
@@ -485,7 +451,6 @@ class Studentfee extends Admin_Controller
                         if (!array_key_exists($student_due_fee_value['student_session_id'], $students)) {
 
                             $students[$student_due_fee_value['student_session_id']] = $this->add_new_student($student_due_fee_value);
-
                         }
 
                         $students[$student_due_fee_value['student_session_id']]['fees'][] = array(
@@ -507,11 +472,8 @@ class Studentfee extends Admin_Controller
                             'fee_code'        => $student_due_fee_value['fee_code'],
 
                         );
-
                     }
-
                 }
-
             }
 
 
@@ -525,9 +487,7 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/studentSearchFee', $data);
 
             $this->load->view('layout/footer', $data);
-
         }
-
     }
 
 
@@ -551,7 +511,6 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/reportByClass', $data);
 
             $this->load->view('layout/footer', $data);
-
         } else {
 
             $student_fees_array      = array();
@@ -581,9 +540,7 @@ class Studentfee extends Admin_Controller
                     $student_array['fee_detail']        = $student_due_fee;
 
                     $student_fees_array[$student['id']] = $student_array;
-
                 }
-
             }
 
             $data['class_id']           = $class_id;
@@ -597,9 +554,7 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/reportByClass', $data);
 
             $this->load->view('layout/footer', $data);
-
         }
-
     }
 
 
@@ -611,7 +566,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_view')) {
 
             access_denied();
-
         }
 
         $data['title']      = 'studentfee List';
@@ -625,7 +579,6 @@ class Studentfee extends Admin_Controller
         $this->load->view('studentfee/studentfeeShow', $data);
 
         $this->load->view('layout/footer', $data);
-
     }
 
 
@@ -637,7 +590,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_delete')) {
 
             access_denied();
-
         }
 
         $invoice_id  = $this->input->post('main_invoice');
@@ -647,13 +599,11 @@ class Studentfee extends Admin_Controller
         if (!empty($invoice_id)) {
 
             $this->studentfee_model->remove($invoice_id, $sub_invoice);
-
         }
 
         $array = array('status' => 'success', 'result' => 'success');
 
         echo json_encode($array);
-
     }
 
 
@@ -669,13 +619,11 @@ class Studentfee extends Admin_Controller
             $data = array('id' => $discount_id, 'status' => 'assigned', 'payment_id' => "");
 
             $this->feediscount_model->updateStudentDiscount($data);
-
         }
 
         $array = array('status' => 'success', 'result' => 'success');
 
         echo json_encode($array);
-
     }
 
 
@@ -714,23 +662,20 @@ class Studentfee extends Admin_Controller
                 $feeList               = $this->studentfeemaster_model->getTransportFeeByID($trans_fee_id);
 
                 $feeList->fee_category = $fee_category;
-
             } else {
 
                 $feeList               = $this->studentfeemaster_model->getDueFeeByFeeSessionGroupFeetype($fee_session_group_id, $fee_master_id, $fee_groups_feetype_id);
 
                 $feeList->fee_category = $fee_category;
-
             }
 
-            
+
 
             $fees_array[] = $feeList;
-
         }
 
         $data['payment_methods'] = $this->studentfeemaster_model->getPaymentMethods();
-        
+
         $data['feearray'] = $fees_array;
 
         $result           = array(
@@ -742,7 +687,6 @@ class Studentfee extends Admin_Controller
 
 
         $this->output->set_output(json_encode($result));
-
     }
 
 
@@ -756,7 +700,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_view')) {
 
             access_denied();
-
         }
 
 
@@ -781,7 +724,6 @@ class Studentfee extends Admin_Controller
 
 
             $transport_fees        = $this->studentfeemaster_model->getStudentTransportFees($student_session_id, $route_pickup_point_id);
-
         }
 
 
@@ -789,7 +731,7 @@ class Studentfee extends Admin_Controller
         $data['student']       = $student;
 
         $student_due_fee       = $this->studentfeemaster_model->getStudentFees($id);
-        
+
         $student_discount_fee  = $this->feediscount_model->getStudentFeesDiscount($id);
 
 
@@ -825,19 +767,16 @@ class Studentfee extends Admin_Controller
             if (!empty($processing_value->fees)) {
 
                 $data['student_processing_fee'] = true;
-
             }
-
         }
 
-        
+
 
         $this->load->view('layout/header', $data);
 
         $this->load->view('studentfee/studentAddfee', $data);
 
         $this->load->view('layout/footer', $data);
-
     }
 
 
@@ -849,7 +788,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_add')) {
 
             access_denied();
-
         }
 
 
@@ -872,7 +810,7 @@ class Studentfee extends Admin_Controller
 
         $data['student_due_fee'] = $student_due_fee;
 
-     
+
 
         $result = array(
 
@@ -881,7 +819,6 @@ class Studentfee extends Admin_Controller
         );
 
         $this->output->set_output(json_encode($result));
-
     }
 
 
@@ -897,7 +834,6 @@ class Studentfee extends Admin_Controller
         $array = array('status' => 'success', 'result' => 'success');
 
         echo json_encode($array);
-
     }
 
 
@@ -911,7 +847,6 @@ class Studentfee extends Admin_Controller
         $this->studentfee_model->remove($id);
 
         redirect('studentfee/index');
-
     }
 
 
@@ -923,7 +858,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_view')) {
 
             access_denied();
-
         }
 
         $data['title'] = 'Add studentfee';
@@ -937,7 +871,6 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/studentfeeCreate', $data);
 
             $this->load->view('layout/footer', $data);
-
         } else {
 
             $data = array(
@@ -951,9 +884,7 @@ class Studentfee extends Admin_Controller
             $this->session->set_flashdata('msg', '<div studentfee="alert alert-success text-center">' . $this->lang->line('success_message') . '</div>');
 
             redirect('studentfee/index');
-
         }
-
     }
 
 
@@ -965,7 +896,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_edit')) {
 
             access_denied();
-
         }
 
         $data['title']      = 'Edit studentfees';
@@ -985,7 +915,6 @@ class Studentfee extends Admin_Controller
             $this->load->view('studentfee/studentfeeEdit', $data);
 
             $this->load->view('layout/footer', $data);
-
         } else {
 
             $data = array(
@@ -1001,9 +930,7 @@ class Studentfee extends Admin_Controller
             $this->session->set_flashdata('msg', '<div studentfee="alert alert-success text-center">' . $this->lang->line('update_message') . '</div>');
 
             redirect('studentfee/index');
-
         }
-
     }
 
 
@@ -1051,7 +978,6 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'fail', 'error' => $data);
 
             echo json_encode($array);
-
         } else {
 
 
@@ -1129,7 +1055,6 @@ class Studentfee extends Admin_Controller
                 $mailsms_array->type           = $mailsms_array->month;
 
                 $mailsms_array->code           = "";
-
             } else {
 
 
@@ -1141,9 +1066,7 @@ class Studentfee extends Admin_Controller
                 if ($mailsms_array->is_system) {
 
                     $mailsms_array->amount = $mailsms_array->balance_fee_master_amount;
-
                 }
-
             }
 
 
@@ -1195,7 +1118,6 @@ class Studentfee extends Admin_Controller
                     $data['feeList']        = $fee_record;
 
                     $print_record = $this->load->view('print/printTransportFeesByName', $data, true);
-
                 } else {
 
 
@@ -1205,9 +1127,7 @@ class Studentfee extends Admin_Controller
                     $data['feeList']        = $fee_record;
 
                     $print_record = $this->load->view('print/printFeesByName', $data, true);
-
                 }
-
             }
 
 
@@ -1233,9 +1153,7 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'success', 'error' => '', 'print' => $print_record);
 
             echo json_encode($array);
-
         }
-
     }
 
 
@@ -1281,7 +1199,6 @@ class Studentfee extends Admin_Controller
             $data['feeList'] = $fee_record;
 
             $page            = $this->load->view('print/printTransportFeesByName', $data, true);
-
         } else {
 
             $fee_record      = $this->studentfeemaster_model->getFeeByInvoice($invoice_id, $sub_invoice_id);
@@ -1289,13 +1206,11 @@ class Studentfee extends Admin_Controller
             $data['feeList'] = $fee_record;
 
             $page = $this->load->view('print/printFeesByName', $data, true);
-
         }
 
 
 
         echo json_encode(array('status' => 1, 'page' => $page));
-
     }
 
 
@@ -1321,7 +1236,6 @@ class Studentfee extends Admin_Controller
             $data['feeList'] = $this->studentfeemaster_model->getTransportFeeByID($trans_fee_id);
 
             $page = $this->load->view('print/printTransportFeesByGroup', $data, true);
-
         } else {
 
 
@@ -1335,13 +1249,11 @@ class Studentfee extends Admin_Controller
             $data['feeList']       = $this->studentfeemaster_model->getDueFeeByFeeSessionGroupFeetype($fee_session_group_id, $fee_master_id, $fee_groups_feetype_id);
 
             $page                  = $this->load->view('print/printFeesByGroup', $data, true);
-
         }
 
 
 
         echo json_encode(array('status' => 1, 'page' => $page));
-
     }
 
 
@@ -1377,19 +1289,16 @@ class Studentfee extends Admin_Controller
                 $feeList               = $this->studentfeemaster_model->getTransportFeeByID($trans_fee_id);
 
                 $feeList->fee_category = $fee_category;
-
             } else {
 
                 $feeList               = $this->studentfeemaster_model->getDueFeeByFeeSessionGroupFeetype($fee_session_group_id, $fee_master_id, $fee_groups_feetype_id);
 
                 $feeList->fee_category = $fee_category;
-
             }
 
 
 
             $fees_array[] = $feeList;
-
         }
 
 
@@ -1397,7 +1306,6 @@ class Studentfee extends Admin_Controller
         $data['feearray'] = $fees_array;
 
         $this->load->view('print/printFeesByGroupArray', $data);
-
     }
 
 
@@ -1409,7 +1317,6 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('search_fees_payment', 'can_view')) {
 
             access_denied();
-
         }
 
         $this->session->set_userdata('top_menu', 'Fees Collection');
@@ -1423,7 +1330,6 @@ class Studentfee extends Admin_Controller
         $this->form_validation->set_rules('paymentid', $this->lang->line('payment_id'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
 
             $paymentid = $this->input->post('paymentid');
@@ -1440,20 +1346,17 @@ class Studentfee extends Admin_Controller
 
                 $feeList                = $this->studentfeemaster_model->getFeeByInvoice($invoice_id, $sub_invoice_id);
 
-               $current_session= $this->customlib->getCurrentSession();
+                $current_session = $this->customlib->getCurrentSession();
 
                 $data['current_session']        = $current_session;
 
                 $data['feeList']        = $feeList;
 
                 $data['sub_invoice_id'] = $sub_invoice_id;
-
             } else {
 
                 $data['feeList'] = array();
-
             }
-
         }
 
         $data['sch_setting'] = $this->sch_setting_detail;
@@ -1465,7 +1368,6 @@ class Studentfee extends Admin_Controller
         $this->load->view('studentfee/searchpayment', $data);
 
         $this->load->view('layout/footer', $data);
-
     }
 
 
@@ -1489,7 +1391,6 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'fail', 'error' => $data);
 
             echo json_encode($array);
-
         } else {
 
             $student_session_id     = $this->input->post('student_session_id');
@@ -1523,15 +1424,12 @@ class Studentfee extends Admin_Controller
 
 
                     $preserve_record[] = $inserted_id;
-
                 }
-
             }
 
             if (!empty($delete_student)) {
 
                 $this->studentfeemaster_model->delete($fee_session_groups, $delete_student);
-
             }
 
 
@@ -1539,9 +1437,7 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'success', 'error' => '', 'message' => $this->lang->line('success_message'));
 
             echo json_encode($array);
-
         }
-
     }
 
 
@@ -1573,7 +1469,6 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'fail', 'error' => $data);
 
             echo json_encode($array);
-
         } else {
 
             $data                 = array();
@@ -1597,7 +1492,6 @@ class Studentfee extends Admin_Controller
                 $remain_amount        = (float) json_decode($remain_amount_object)->balance;
 
                 $remain_amount_fine   = json_decode($remain_amount_object)->fine_amount;
-
             } else {
 
                 $fee_groups_feetype_id  = $this->input->post('fee_groups_feetype_id');
@@ -1609,7 +1503,6 @@ class Studentfee extends Admin_Controller
                 $remain_amount          = json_decode($remain_amount_object)->balance;
 
                 $remain_amount_fine     = json_decode($remain_amount_object)->fine_amount;
-
             }
 
 
@@ -1621,9 +1514,7 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'success', 'error' => '', 'balance' => convertBaseAmountCurrencyFormat($remain_amount), 'discount_not_applied' => $discount_not_applied, 'remain_amount_fine' => convertBaseAmountCurrencyFormat($remain_amount_fine), 'student_fees' => convertBaseAmountCurrencyFormat(json_decode($remain_amount_object)->student_fees));
 
             echo json_encode($array);
-
         }
-
     }
 
 
@@ -1657,7 +1548,6 @@ class Studentfee extends Admin_Controller
         if (strtotime($result->due_date) < strtotime(date('Y-m-d'))) {
 
             $fee_fine_amount = is_null($result->fine_percentage) ? $result->fine_amount : percentageAmount($result->fees, $result->fine_percentage);
-
         }
 
 
@@ -1675,9 +1565,7 @@ class Studentfee extends Admin_Controller
                 $amount_discount = $amount_discount + $amount_detail_value->amount_discount;
 
                 $amount_fine     = $amount_fine + $amount_detail_value->amount_fine;
-
             }
-
         }
 
 
@@ -1689,7 +1577,6 @@ class Studentfee extends Admin_Controller
         $array          = array('status' => 'success', 'error' => '', 'student_fees' => $due_amt, 'balance' => $amount_balance, 'fine_amount' => $fine_amount);
 
         return json_encode($array);
-
     }
 
 
@@ -1725,7 +1612,6 @@ class Studentfee extends Admin_Controller
         if (strtotime($result->due_date) < strtotime(date('Y-m-d'))) {
 
             $fee_fine_amount = $result->fine_amount;
-
         }
 
 
@@ -1733,7 +1619,6 @@ class Studentfee extends Admin_Controller
         if ($result->is_system) {
 
             $due_amt = $result->student_fees_master_amount;
-
         }
 
 
@@ -1751,9 +1636,7 @@ class Studentfee extends Admin_Controller
                 $amount_discount = $amount_discount + $amount_detail_value->amount_discount;
 
                 $amount_fine     = $amount_fine + $amount_detail_value->amount_fine;
-
             }
-
         }
 
 
@@ -1767,7 +1650,6 @@ class Studentfee extends Admin_Controller
         $array          = array('status' => 'success', 'error' => '', 'student_fees' => $due_amt, 'balance' => $amount_balance, 'fine_amount' => $fine_amount);
 
         return json_encode($array);
-
     }
 
 
@@ -1785,7 +1667,6 @@ class Studentfee extends Admin_Controller
                     $this->form_validation->set_message('check_deposit', $this->lang->line('deposit_amount_can_not_be_less_than_zero'));
 
                     return false;
-
                 } else {
 
                     $transport_fees_id      = $this->input->post('transport_fees_id');
@@ -1799,11 +1680,9 @@ class Studentfee extends Admin_Controller
                     if ($transport_fees_id != 0) {
 
                         $remain_amount = $this->getStudentTransportFeetypeBalance($transport_fees_id);
-
                     } else {
 
                         $remain_amount = $this->getStuFeetypeBalance($fee_groups_feetype_id, $student_fees_master_id);
-
                     }
 
                     $remain_amount = json_decode($remain_amount)->balance;
@@ -1813,35 +1692,27 @@ class Studentfee extends Admin_Controller
                         $this->form_validation->set_message('check_deposit', $this->lang->line('deposit_amount_can_not_be_greater_than_remaining'));
 
                         return false;
-
                     } else {
 
                         return true;
-
                     }
-
                 }
 
                 return true;
-
             }
-
         } elseif (!is_numeric($this->input->post('amount'))) {
 
             $this->form_validation->set_message('check_deposit', $this->lang->line('amount_field_must_contain_only_numbers'));
 
             return false;
-
         } elseif (!is_numeric($this->input->post('amount_discount'))) {
 
             return true;
-
         }
 
 
 
         return true;
-
     }
 
 
@@ -1855,11 +1726,9 @@ class Studentfee extends Admin_Controller
         foreach ($discounts_array as $discount_key => $discount_value) {
 
             $discounts_array[$discount_key]->{"amount"} = convertBaseAmountCurrencyFormat($discount_value->amount);
-
         }
 
         return $discounts_array;
-
     }
 
 
@@ -1891,7 +1760,6 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 0, 'error' => $data);
 
             echo json_encode($array);
-
         } else {
 
             $collected_array = array();
@@ -1957,7 +1825,6 @@ class Studentfee extends Admin_Controller
                     'amount_detail'            => $json_array,
 
                 );
-
             }
 
 
@@ -2015,7 +1882,6 @@ class Studentfee extends Admin_Controller
                         $fine_amount[]     = amountFormat($mailsms_array->fine_amount);
 
                         $amount[]          = amountFormat($mailsms_array->amount);
-
                     } else {
 
 
@@ -2043,15 +1909,11 @@ class Studentfee extends Admin_Controller
                         if ($mailsms_array->is_system) {
 
                             $amount[] = amountFormat($mailsms_array->balance_fee_master_amount);
-
                         } else {
 
                             $amount[] = amountFormat($mailsms_array->amount);
-
                         }
-
                     }
-
                 }
 
                 $obj_mail                     = [];
@@ -2095,7 +1957,6 @@ class Studentfee extends Admin_Controller
 
 
                 $this->mailsmsconf->mailsms('fee_submission', $obj_mail);
-
             }
 
 
@@ -2105,9 +1966,7 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 1, 'error' => '');
 
             echo json_encode($array);
-
         }
-
     }
 
 
@@ -2195,8 +2054,5 @@ class Studentfee extends Admin_Controller
         );
 
         return $new_student;
-
     }
-
 }
-

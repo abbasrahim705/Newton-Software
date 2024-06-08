@@ -2368,3 +2368,5 @@ $lang['installment_due_date'] = "Installment Due Date";
 $lang['tabby'] = "Tabby";
 $lang['tamara'] = "Tamara";
 $lang['bank_transfer'] = "Bank Transfer";
+$lang['location'] = "Location";
+$lang['payment_mode'] = "Mode of payment";
