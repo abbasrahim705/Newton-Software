@@ -191,6 +191,12 @@ class Studentfee extends Admin_Controller
 
                 $row[] = $this->customlib->dateformat($student->installment_due_date);
                 $row[] = $student->payment_mode;
+                $description = '';
+                if(isset($student->amount_detail) && !empty($student->amount_detail)){
+                    $data = json_decode($student->amount_detail, true);
+                    $description = $data['1']['description'];
+                }
+                $row[] = $description;
                 $row[] = $student->location;
 
 
